@@ -1,0 +1,168 @@
+" * * * Vundle begin * * *
+" Command To install Vundle:
+" git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+" Set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" Alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" Let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+" Plugin 'tpope/vim-markdown'
+
+" The following are examples of different formats supported.
+" Keep Plugin commands between vundle#begin/end.
+" plugin on GitHub repo
+" Plugin 'tpope/vim-fugitive'
+" plugin from http://vim-scripts.org/vim/scripts.html
+" Plugin 'L9'
+" Git plugin not hosted on GitHub
+" Plugin 'git://git.wincent.com/command-t.git'
+" git repos on your local machine (i.e. when working on your own plugin)
+" Plugin 'file:///home/gmarik/path/to/plugin'
+" The sparkup vim script is in a subdirectory of this repo called vim.
+" Pass the path to set the runtimepath properly.
+" Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+" Install L9 and avoid a Naming conflict if you've already installed a
+" different version somewhere else.
+" Plugin 'ascenator/L9', {'name': 'newL9'}
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+" To ignore plugin indent changes, instead use:
+"filetype plugin on
+"
+" Brief help
+" :PluginList       - lists configured plugins
+" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
+" :PluginSearch foo - searches for foo; append `!` to refresh local cache
+" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
+"
+" see :h vundle for more details or wiki for FAQ
+" Put your non-Plugin stuff after this line
+" " * * * Vundle end * * *
+
+
+set tabstop=4
+set shiftwidth=4
+set expandtab
+set smarttab
+set hlsearch
+
+" Prevent indentation on # comment
+set cindent cinkeys-=0#
+" Disablel automatic omment insertion
+autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+" Turn off search loop
+set nowrapscan
+
+" Turn off tabs for makefiles
+autocmd FileType make setlocal noexpandtab
+
+" Insert newline without entering insert mode
+nmap <S-Enter> O<Esc>
+nmap <CR> o<Esc>
+
+" Use system clipboard
+set clipboard=unnamed
+
+set exrc
+
+" Hit F5 to trim trailing whitespaces
+:nnoremap <silent> <F5> :let _s=@/ <Bar> :%s/\s\+$//e <Bar> :let @/=_s <Bar> :nohl <Bar> :unlet _s <CR>
+" Hit to highlight the current line
+:nnoremap <C-L> :set cursorline! <CR>
+
+" To see code below during search
+set scrolloff=3
+
+
+" Hexmode
+" These shortcuts are quite annoying
+" nnoremap <C-H> :Hexmode<CR>
+" inoremap <C-H> <Esc>:Hexmode<CR>
+" vnoremap <C-H> :<C-U>Hexmode<CR>
+
+" ex command for toggling hex mode - define mapping if desired
+command -bar Hexmode call ToggleHex()
+
+" Helper function to toggle hex mode
+function ToggleHex()
+  " hex mode should be considered a read-only operation
+  " save values for modified and read-only for restoration later,
+  " and clear the read-only flag for now
+  let l:modified=&mod
+  let l:oldreadonly=&readonly
+  let &readonly=0
+  let l:oldmodifiable=&modifiable
+  let &modifiable=1
+  if !exists("b:editHex") || !b:editHex
+    " save old options
+    let b:oldft=&ft
+    let b:oldbin=&bin
+    " set new options
+    setlocal binary " make sure it overrides any textwidth, etc.
+    silent :e " this will reload the file without trickeries
+              "(DOS line endings will be shown entirely )
+    let &ft="xxd"
+    " set status
+    let b:editHex=1
+    " switch to hex editor
+    %!xxd
+  else
+    " restore old options
+    let &ft=b:oldft
+    if !b:oldbin
+      setlocal nobinary
+    endif
+    " set status
+    let b:editHex=0
+    " return to normal editing
+    %!xxd -r
+  endif
+  " restore values for modified and read only state
+  let &mod=l:modified
+  let &readonly=l:oldreadonly
+  let &modifiable=l:oldmodifiable
+endfunction
+
+" Highlight trailing spaces
+if has("syntax") && (&t_Co > 2 || has("gui_running"))
+  syntax on
+  function! ActivateInvisibleCharIndicator()
+  	syntax match TrailingSpace "[ \t]\+$" display containedin=ALL
+  	highlight TrailingSpace ctermbg=Red
+  endf
+  autocmd BufNewFile,BufRead * call ActivateInvisibleCharIndicator()
+endif
+" Show tabs, trailing whitespace, and continued lines visually
+set list listchars=tab:»·,trail:·,extends:…
+
+" Status line, see https://shapeshed.com/vim-statuslines/, http://vimdoc.sourceforge.net/htmldoc/options.html#'statusline'
+set laststatus=2
+set statusline=
+" For color see ':so $VIMRUNTIME/syntax/hitest.vim'
+set statusline+=%#PmenuSel#
+set statusline+=%f          " file path
+" set statusline+=%m
+set statusline+=%=          " align to the right side
+set statusline+=\ %y        " file type
+set statusline+=\ %p%%      " line pos percentage
+set statusline+=\ Ln\ %l\,\ Col\ %c     " line/column
+
+" Enable syntax highlighting in markdown codeblocks. Requires vim-markdown plugin (not in macos).
+" https://coderwall.com/p/ftqcla/markdown-with-fenced-code-blocks-in-vim,
+" https://github.com/github/linguist/blob/master/lib/linguist/languages.yml
+let g:markdown_fenced_languages = ['py=python', 'C', 'bash', 'json=javascript', 'xml', 'javascript', 'js=javascript', 'ruby', 'sql']
+
+" python goto next/previous member with [[ and ]]
+autocmd FileType python nnoremap <buffer> [[ ?^class\\|^\s*def\\|^\s*async\s*def<CR>
+autocmd FileType python nnoremap <buffer> ]] /^class\\|^\s*def\\|^\s*async\s*def<CR>
+
+" Press Space to remove highlighting of search results after replace
+:noremap <silent> <Space> :silent noh<Bar>echo<CR>
