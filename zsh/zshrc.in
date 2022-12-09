@@ -1,25 +1,29 @@
 # For git: do not use pager if output takes less than 1 screen (https://stackoverflow.com/questions/2183900/how-do-i-prevent-git-diff-from-using-a-pager)
 export LESS="-F -X -R $LESS"
 
-# MacOS: without this realpath and other utils are starting with g
-export PATH=/usr/local/opt/coreutils/libexec/gnubin:$PATH
+case `uname` in
+  Darwin)
+    # without this realpath and other utils are starting with g
+    export PATH=/usr/local/opt/coreutils/libexec/gnubin:$PATH
+    # gnu sed installed from brew
+    PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
+  ;;
+esac
 
 # https://unix.stackexchange.com/questions/572439/make-ctrl-w-and-ctrl-alt-h-in-zsh-behave-the-same-as-in-bash
 # make ^W and
 autoload -Uz backward-kill-word-match
-
 # Standard widgets https://zsh.sourceforge.io/Doc/Release/Zsh-Line-Editor.html#Standard-Widgets
 bindkey '^W' backward-kill-space-word
 zle -N backward-kill-space-word backward-kill-word-match
 zstyle :zle:backward-kill-space-word word-style space
-
 # See man zshzle
 # Ctrl+Alt+Backspace as in bash - delete work backward
 bindkey '^[^H' backward-kill-bash-word
 zle -N backward-kill-bash-word backward-kill-word-match
 zstyle :zle:backward-kill-bash-word word-style bash
 # Alt+f and Alt+b - jump word respecting dashes
-bindkey '^[f' forward-word
+bindkey '^[f' vi-forward-word
 bindkey '^[b' vi-backward-word
 
 # powerlevel10k theme: https://github.com/romkatv/powerlevel10k
@@ -31,9 +35,6 @@ unsetopt inc_append_history
 unsetopt share_history
 
 setopt AUTO_CD
-hash -d dropbox=/Users/Shared/Dropbox
-hash -d today=~/Documents/today
-
 # This disables addition of backslashes on paste
 # https://github.com/ohmyzsh/ohmyzsh/issues/7632
 # This should go BEFORE sourcing zsh
@@ -41,8 +42,7 @@ DISABLE_MAGIC_FUNCTIONS=true
 
 # By default ls lists directories with the same color as normal files
 # This should go AFTER sourcing OMZ
-# Not sure if you really need it. Try to uncomment it.
-# alias ls='ls --color=auto'
+alias ls='ls --color=auto'
 
-# Allow autocomplete when cursor is in betwee text
+# Allows autocomplete when cursor is placed on a non-whitespace character
 bindkey '^i' expand-or-complete-prefix
