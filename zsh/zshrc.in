@@ -23,26 +23,25 @@ bindkey '^[^H' backward-kill-bash-word
 zle -N backward-kill-bash-word backward-kill-word-match
 zstyle :zle:backward-kill-bash-word word-style bash
 # Alt+f and Alt+b - jump word respecting dashes
-bindkey '^[f' vi-forward-word
-bindkey '^[b' vi-backward-word
+# Looks like it's not needed for ubuntu 22.04
+# bindkey '^[f' vi-forward-word
+# bindkey '^[b' vi-backward-word
 
-# powerlevel10k theme: https://github.com/romkatv/powerlevel10k
-
-# Have individual history per tab instead of one history for all
-# https://superuser.com/questions/1245273/iterm2-version-3-individual-history-per-tab
-# This should go AFTER sourcing zsh
-unsetopt inc_append_history
-unsetopt share_history
-
-setopt AUTO_CD
-# This disables addition of backslashes on paste
-# https://github.com/ohmyzsh/ohmyzsh/issues/7632
-# This should go BEFORE sourcing zsh
-DISABLE_MAGIC_FUNCTIONS=true
-
-# By default ls lists directories with the same color as normal files
-# This should go AFTER sourcing OMZ
-alias ls='ls --color=auto'
-
-# Allows autocomplete when cursor is placed on a non-whitespace character
-bindkey '^i' expand-or-complete-prefix
+# # Have individual history per tab instead of one history for all
+# # https://superuser.com/questions/1245273/iterm2-version-3-individual-history-per-tab
+# # This should go AFTER sourcing zsh
+# unsetopt inc_append_history
+# unsetopt share_history
+# 
+# setopt AUTO_CD
+# # This disables addition of backslashes on paste
+# # https://github.com/ohmyzsh/ohmyzsh/issues/7632
+# # This should go BEFORE sourcing zsh
+# DISABLE_MAGIC_FUNCTIONS=true
+# 
+# # By default ls lists directories with the same color as normal files
+# # This should go AFTER sourcing OMZ
+# alias ls='ls --color=auto'
+# 
+# # Allows autocomplete when cursor is placed on a non-whitespace character
+# bindkey '^i' expand-or-complete-prefix
