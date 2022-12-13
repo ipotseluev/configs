@@ -166,3 +166,6 @@ autocmd FileType python nnoremap <buffer> ]] /^class\\|^\s*def\\|^\s*async\s*def
 
 " Press Space to remove highlighting of search results after replace
 :noremap <silent> <Space> :silent noh<Bar>echo<CR>
+
+" Use \/ for whole word search
+:nnoremap <leader>/ /\<\><left><left>
