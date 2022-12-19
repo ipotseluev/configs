@@ -1,0 +1,2 @@
+sudo update-alternatives --config editor
+sudo update-alternatives --config view
