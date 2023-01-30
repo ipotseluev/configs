@@ -23,8 +23,8 @@ bindkey '^[^H' backward-kill-bash-word
 zle -N backward-kill-bash-word backward-kill-word-match
 zstyle :zle:backward-kill-bash-word word-style bash
 # Alt+f and Alt+b - jump word respecting dashes
-# bindkey '^[f' vi-forward-word
-# bindkey '^[b' vi-backward-word
+bindkey '^[f' vi-forward-blank-word 
+bindkey '^[b' vi-backward-blank-word
 
 # # Have individual history per tab instead of one history for all
 # # https://superuser.com/questions/1245273/iterm2-version-3-individual-history-per-tab
@@ -41,6 +41,6 @@ zstyle :zle:backward-kill-bash-word word-style bash
 # # By default ls lists directories with the same color as normal files
 # # This should go AFTER sourcing OMZ
 # alias ls='ls --color=auto'
-#
-# # Allows autocomplete when cursor is placed on a non-whitespace character
-# bindkey '^i' expand-or-complete-prefix
+
+# Allows autocomplete when cursor is placed on a non-whitespace character
+bindkey '^i' expand-or-complete-prefix
