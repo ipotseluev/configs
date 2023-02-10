@@ -26,12 +26,12 @@ zstyle :zle:backward-kill-bash-word word-style bash
 bindkey '^[f' vi-forward-blank-word 
 bindkey '^[b' vi-backward-blank-word
 
-# # Have individual history per tab instead of one history for all
-# # https://superuser.com/questions/1245273/iterm2-version-3-individual-history-per-tab
-# # This should go AFTER sourcing zsh
-# unsetopt inc_append_history
-# unsetopt share_history
-#
+# Have individual history per tab instead of one history for all
+# https://superuser.com/questions/1245273/iterm2-version-3-individual-history-per-tab
+# This should go AFTER sourcing zsh
+unsetopt inc_append_history
+unsetopt share_history
+
 # setopt AUTO_CD
 # # This disables addition of backslashes on paste
 # # https://github.com/ohmyzsh/ohmyzsh/issues/7632
