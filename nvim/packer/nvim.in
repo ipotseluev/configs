@@ -1,0 +1,8 @@
+" This loads plugins from ~/.config/nvim/lua/plugins.lua
+lua require('plugins')
+
+" automatically run :PackerCompile whenever plug.lua is updated
+augroup packer_user_config
+  autocmd!
+  autocmd BufWritePost plugins.lua source <afile> | PackerCompile
+augroup end

@@ -1,6 +1,9 @@
 # For git: do not use pager if output takes less than 1 screen (https://stackoverflow.com/questions/2183900/how-do-i-prevent-git-diff-from-using-a-pager)
 export LESS="-F -X -R $LESS"
 
+# Use $! and !! immediately instead of expanding first
+setopt no_hist_verify
+
 case `uname` in
   Darwin)
     # without this realpath and other utils are starting with g
@@ -23,7 +26,7 @@ bindkey '^[^H' backward-kill-bash-word
 zle -N backward-kill-bash-word backward-kill-word-match
 zstyle :zle:backward-kill-bash-word word-style bash
 # Alt+f and Alt+b - jump word respecting dashes
-bindkey '^[f' vi-forward-blank-word 
+bindkey '^[f' vi-forward-blank-word
 bindkey '^[b' vi-backward-blank-word
 
 # Have individual history per tab instead of one history for all

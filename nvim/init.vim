@@ -53,3 +53,19 @@ set list listchars=tab:»·,trail:·,extends:…
 " python goto next/previous member with [[ and ]]
 autocmd FileType python nnoremap <buffer> [[ ?^class\\|^\s*def\\|^\s*async\s*def<CR>
 autocmd FileType python nnoremap <buffer> ]] /^class\\|^\s*def\\|^\s*async\s*def<CR>
+
+" Shortcut Ctrl-s for saving
+nnoremap <c-s> :w<cr>
+
+source ~/workspace/github/my/configs/nvim/packer/nvim.in
+source ~/workspace/github/my/configs/nvim/coc/init.vim
+
+lua <<EOF
+-- example of setup of packer plugin
+-- require("mason").setup()
+EOF
+
+" Proper highlighting of comments for jsonc
+autocmd FileType json syntax match Comment +\/\/.\+$+
+
+let g:markdown_fenced_languages = ['rust', 'html', 'python', 'bash=sh']

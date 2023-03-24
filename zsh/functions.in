@@ -1,0 +1,9 @@
+function run-rust-test() {
+    local FILENAME=${1}
+    if ! [ -e ${FILENAME} ]; then
+        echo "Usage:  FILE"
+        exit 1
+    fi
+    which rustc
+    rustc ${FILENAME} -o /tmp/out && /tmp/out ${@:2}
+}
