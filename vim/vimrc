@@ -158,7 +158,7 @@ set statusline+=\ Ln\ %l\,\ Col\ %c     " line/column
 " Enable syntax highlighting in markdown codeblocks. Requires vim-markdown plugin (not in macos).
 " https://coderwall.com/p/ftqcla/markdown-with-fenced-code-blocks-in-vim,
 " https://github.com/github/linguist/blob/master/lib/linguist/languages.yml
-let g:markdown_fenced_languages = ['py=python', 'C', 'bash', 'json=javascript', 'xml', 'javascript', 'js=javascript', 'ruby', 'sql']
+let g:markdown_fenced_languages = ['py=python', 'C', 'bash', 'json=javascript', 'xml', 'javascript', 'js=javascript', 'ruby', 'sql', 'toml']
 
 " python goto next/previous member with [[ and ]]
 autocmd FileType python nnoremap <buffer> [[ ?^class\\|^\s*def\\|^\s*async\s*def<CR>

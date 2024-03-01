@@ -67,4 +67,7 @@ EOF
 " Proper highlighting of comments for jsonc
 autocmd FileType json syntax match Comment +\/\/.\+$+
 
-let g:markdown_fenced_languages = ['rust', 'html', 'python', 'bash=sh']
+let g:markdown_fenced_languages = ['rust', 'html', 'python', 'bash=sh', 'json', 'proto']
+
+" https://stackoverflow.com/questions/62435926/coc-nvim-how-to-disable-auto-complete-suggestions-in-markdown-files
+autocmd FileType markdown let b:coc_suggest_disable = 1
