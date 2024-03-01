@@ -23,7 +23,6 @@ set clipboard=unnamed
 
 set exrc
 
-
 " Hit F5 to trim trailing whitespaces
 :nnoremap <silent> <F5> :let _s=@/ <Bar> :%s/\s\+$//e <Bar> :let @/=_s <Bar> :nohl <Bar> :unlet _s <CR>
 " Hit to highlight the current line
@@ -57,8 +56,8 @@ autocmd FileType python nnoremap <buffer> ]] /^class\\|^\s*def\\|^\s*async\s*def
 " Shortcut Ctrl-s for saving
 nnoremap <c-s> :w<cr>
 
-source ~/workspace/github/my/configs/nvim/packer/nvim.in
-source ~/workspace/github/my/configs/nvim/coc/init.vim
+" source ~/workspace/my/configs/nvim/packer/nvim.in
+" source ~/workspace/my/configs/nvim/coc/init.vim
 
 lua <<EOF
 -- example of setup of packer plugin
