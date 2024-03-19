@@ -57,7 +57,6 @@ autocmd FileType python nnoremap <buffer> ]] /^class\\|^\s*def\\|^\s*async\s*def
 nnoremap <c-s> :w<cr>
 
 " source ~/workspace/my/configs/nvim/packer/nvim.in
-" source ~/workspace/my/configs/nvim/coc/init.vim
 
 lua <<EOF
 -- example of setup of packer plugin
@@ -71,3 +70,7 @@ let g:markdown_fenced_languages = ['rust', 'html', 'python', 'bash=sh', 'json', 
 
 " https://stackoverflow.com/questions/62435926/coc-nvim-how-to-disable-auto-complete-suggestions-in-markdown-files
 autocmd FileType markdown let b:coc_suggest_disable = 1
+
+" coc
+" Press Enter to confirm completion
+inoremap <expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
