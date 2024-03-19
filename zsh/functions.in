@@ -2,22 +2,35 @@ Yellow='\033[0;33m'       # Yellow
 Green='\033[0;32m'        # Green
 NC='\033[0m'              # No Color
 
-# Compile provided .rs file into a /tmp/out.
-# If compiled - run program.
-function rust-test-run() {
-    local FILENAME=${1}
+# Compiles provided source file into a /tmp/out.
+# If compilation succeeds - run /tmp/out.
+function _test_run() {
     if ! [ -e ${FILENAME} ]; then
         echo "Usage:  FILE"
         return 1
     fi
-    which rustc
-    if rustc ${FILENAME} -o /tmp/out; then
+    which ${COMPILIER}
+    if "$@" -o /tmp/out; then
         echo -e "${Green}Compilation succeed. Starting the program...${NC}\n"
         /tmp/out ${@:2}
         return 0
     fi
     echo -e "\n${Yellow}Compilation has failed${NC}"
     return 1
+}
+
+# Compiles provided c++ source file into a /tmp/out.
+# If compilation succeeds - run /tmp/out.
+function cpp-test-run() {
+    local FILENAME=${1}
+    _test_run g++ -std=c++20 ${FILENAME}
+}
+
+# Compile provided .rs file into a /tmp/out.
+# If compilation succeeds - run /tmp/out.
+function rust-test-run() {
+    local FILENAME=${1}
+    _test_run rustc ${FILENAME}
 }
 
 # Tries to compile the provided .rs file.
@@ -51,3 +64,39 @@ function rust-test-watch() {
         done
     done
 }
+
+# Creates backup of git repo by creating directory $2/XX.$1 and copying there repo $3
+# ignoring 'target' directory, where XX - auto-incrementing index of backup, [0..99]
+_backup_repo() {
+    local backup_name=$1
+    local backup_dir=$2
+    local repo_dir=$3
+
+    if [[ -z $1 ]]; then
+      echo "Error: Backup name is not provided."
+      return 1  # Use `exit 1` if you want to exit the entire script instead of just the function
+    fi
+    echo "args: $@"
+
+    local last_index=$(ls ${backup_dir} | grep -E '^[0-9]{2}\.[^/]+$' | sort -r | head -n1 | cut -d. -f1)
+    last_backup=${last_backup:-0}
+    local next_index=$(($last_index + 1))
+    next_index=$(printf "%02d" $((next_index % 100))) # Format to 2 digits, roll over at 99
+
+    local backup_dir="${backup_dir}/${next_index}.${backup_name}"
+    mkdir -p "$backup_dir"
+    rsync --human-readable --archive --verbose --exclude 'target' ${repo_dir} "$backup_dir"
+
+    echo "Backup created at $backup_dir"
+    echo "List of backups:"
+    ls $(dirname ${backup_dir}) | grep -E '^[0-9]{2}\.[^/]+$'
+}
+
+backup_redis() {
+    local repo_dir=~/workspace/studying/codecrafters-redis-rust
+    local backup_dir=~/tmp/backups/redis
+    _backup_repo "$1" ${backup_dir} ${repo_dir}
+}
+
+# Generates mac addr
+alias genmac="openssl rand -hex 6 | sed 's/\(..\)/\1:/g; s/.$//'"
