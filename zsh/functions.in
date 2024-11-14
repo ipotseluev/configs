@@ -67,14 +67,14 @@ function rust-test-watch() {
 
 # Creates backup of git repo by creating directory $2/XX.$1 and copying there repo $3
 # ignoring 'target' directory, where XX - auto-incrementing index of backup, [0..99]
-_backup_repo() {
+_backup_common() {
     local backup_name=$1
     local backup_dir=$2
-    local repo_dir=$3
+    local source=$3
 
-    if [[ -z $1 ]]; then
-      echo "Error: Backup name is not provided."
-      return 1  # Use `exit 1` if you want to exit the entire script instead of just the function
+    if [[ -z $backup_name ]]; then
+        echo "Error: Backup name is not provided."
+        return 1
     fi
     echo "args: $@"
 
@@ -83,19 +83,53 @@ _backup_repo() {
     local next_index=$(($last_index + 1))
     next_index=$(printf "%02d" $((next_index % 100))) # Format to 2 digits, roll over at 99
 
-    local backup_dir="${backup_dir}/${next_index}.${backup_name}"
-    mkdir -p "$backup_dir"
-    rsync --human-readable --archive --verbose --exclude 'target' ${repo_dir} "$backup_dir"
+    local backup_path="${backup_dir}/${next_index}.${backup_name}"
+    mkdir -p "$backup_path"
 
-    echo "Backup created at $backup_dir"
+    # Perform the actual backup
+    rsync --human-readable --archive --verbose --exclude 'target' ${source} "$backup_path"
+    # if rsync fails, remove backup directory, print error and exit
+    if [[ $? -ne 0 ]]; then
+        rm -rf "$backup_path"
+        echo "Error: rsync failed" >&2
+        return 1
+    fi
+
+    echo "Backup created at $backup_path"
     echo "List of backups:"
-    ls $(dirname ${backup_dir}) | grep -E '^[0-9]{2}\.[^/]+$'
+    realpath $(dirname ${backup_path})/*
 }
 
+# Local backup function
+_backup_repo() {
+    _backup_common "$1" "$2" "$3"
+}
+
+# Remote backup function
+_backup_remote_repo() {
+    local remote_source="${4}:${3}"  # Combine remote_name and repo_dir
+    _backup_common "$1" "$2" "$remote_source"
+}
+
+# Helper function to create a unified interface for both local and remote backups
+_backup() {
+    local backup_name=$1
+    local backup_dir=$2
+    local repo_dir=$3
+    local remote_name=$4
+
+    if [[ -n $remote_name ]]; then
+        _backup_remote_repo "$backup_name" "$backup_dir" "$repo_dir" "$remote_name"
+    else
+        _backup_repo "$backup_name" "$backup_dir" "$repo_dir"
+    fi
+}
+
+# Example
 backup_redis() {
     local repo_dir=~/workspace/studying/codecrafters-redis-rust
     local backup_dir=~/tmp/backups/redis
-    _backup_repo "$1" ${backup_dir} ${repo_dir}
+    _backup "$1" ${backup_dir} ${repo_dir}
 }
 
 # Generates mac addr

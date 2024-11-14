@@ -1,3 +1,6 @@
+# Without it, git used Ukrainian language for output
+export LANG=en_US.UTF-8
+
 # For git: do not use pager if output takes less than 1 screen (https://stackoverflow.com/questions/2183900/how-do-i-prevent-git-diff-from-using-a-pager)
 export LESS="-F -X -R $LESS"
 

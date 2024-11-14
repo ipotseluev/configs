@@ -29,7 +29,7 @@ set exrc
 :nnoremap <C-L> :set cursorline! <CR>
 
 " To see code below during search
-set scrolloff=3
+set scrolloff=2
 
 
 " Highlight trailing spaces
@@ -56,7 +56,7 @@ autocmd FileType python nnoremap <buffer> ]] /^class\\|^\s*def\\|^\s*async\s*def
 " Shortcut Ctrl-s for saving
 nnoremap <c-s> :w<cr>
 
-" source ~/workspace/my/configs/nvim/packer/nvim.in
+source ~/workspace/github/my/configs/nvim/packer/nvim.in
 
 lua <<EOF
 -- example of setup of packer plugin
@@ -66,7 +66,7 @@ EOF
 " Proper highlighting of comments for jsonc
 autocmd FileType json syntax match Comment +\/\/.\+$+
 
-let g:markdown_fenced_languages = ['rust', 'html', 'python', 'bash=sh', 'json', 'proto']
+filetype plugin indent on
 
 " https://stackoverflow.com/questions/62435926/coc-nvim-how-to-disable-auto-complete-suggestions-in-markdown-files
 autocmd FileType markdown let b:coc_suggest_disable = 1
@@ -74,3 +74,48 @@ autocmd FileType markdown let b:coc_suggest_disable = 1
 " coc
 " Press Enter to confirm completion
 inoremap <expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
+
+" Map for Ukrainian language
+set langmap=йq,цw,уe,кr,еt,нy,гu,шi,щo,зp,х[,ї],фa,іs,вd,аf,пg,рh,оj,лk,дl,ж\\;,
+  \є',ґ\\,яz,чx,сc,мv,иb,тn,ьm,б\\,,ю.,,ЙQ,ЦW,УE,КR,ЕT,НY,НY,ГU,ШI,ЩO,ЗP,Х{,Ї},ФA,
+  \ІS,ВD,АF,ПG,РH,ОJ,ЛK,ДL,Ж\\:,Є\\",Ґ\|,ЯZ,ЧX,СC,МV,ИB,ТN,ЬM,Б\\<,Ю>,№#
+
+set termguicolors
+hi Normal ctermbg=NONE guibg=NONE
+
+autocmd FileType markdown
+    \ setlocal nofoldenable |
+    \ setlocal foldmethod=manual
+
+syntax enable
+
+" Enhanced Markdown syntax
+augroup markdown_syntax
+    autocmd!
+    " Clear existing markdown syntax (essential!)
+    autocmd FileType markdown syntax clear
+
+    " Define basic markdown syntax
+    autocmd FileType markdown syntax match markdownHeading "^#.*$"
+
+    " Bold with ** or __
+    autocmd FileType markdown syntax region markdownBold matchgroup=markdownBoldDelimiter start="\*\*" end="\*\*" keepend contains=@Spell
+    autocmd FileType markdown syntax region markdownBold matchgroup=markdownBoldDelimiter start="__" end="__" keepend contains=@Spell
+
+    " Markdown Links (Separate Name and URL)
+    autocmd FileType markdown syntax match markdownLinkText "\[\zs[^]]\+\ze\]" containedin=ALL
+    autocmd FileType markdown syntax match markdownLinkUrl "(https\?:\/\/[^)]*)" containedin=ALL
+
+    " Apply highlighting
+    autocmd FileType markdown highlight markdownBold cterm=bold gui=bold guifg=#FFFFFF
+    autocmd FileType markdown highlight markdownBoldDelimiter cterm=bold gui=bold guifg=#666666
+    autocmd FileType markdown highlight markdownHeading cterm=bold gui=bold guifg=#82AAFF
+    autocmd FileType markdown highlight markdownLinkText cterm=underline gui=underline guifg=#56B6C2
+    autocmd FileType markdown highlight markdownLinkUrl cterm=bold gui=bold guifg=#56B6C2
+augroup END
+
+let g:markdown_fenced_languages = ['html', 'python', 'lua', 'vim', 'typescript', 'javascript', 'rust', 'sh']
+
+" Set proper file types
+autocmd BufNewFile,BufRead *.md set filetype=markdown
+autocmd FileType markdown setlocal spell  " Enable spell checking
