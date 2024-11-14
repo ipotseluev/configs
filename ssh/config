@@ -1,0 +1,12 @@
+# If you can access host-b only from host-a, you can use setting with ProxyJump
+# ssh host-b
+# Alternatively, you can use zsh alias:
+# alias ssh-b='ssh -t host-a '\''ssh -t host-b'\'
+Host host-a
+    HostName bb-host-a
+    User debian
+
+Host host-b
+    HostName 192.168.100.3
+    User root
+    ProxyJump host-a

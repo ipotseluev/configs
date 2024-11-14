@@ -2,9 +2,13 @@
 
 Installed it as requirement for rust-analyser setup for nvim (https://rsdlt.github.io/posts/rust-nvim-ide-guide-walkthrough-development-debug/#set-up-rust-with-neovim)
 
+## Installation
+
+See https://github.com/wbthomason/packer.nvim
+
 ## Setup
 
-https://github.com/wbthomason/packer.nvim
+You can add plugins by adding declaration to `vim ~/.config/nvim/lua/plugins.lua`
 
 ```~/.config/nvim/lua/plugins.lua
 return require('packer').startup(function(use)
@@ -13,7 +17,6 @@ return require('packer').startup(function(use)
   use { "williamboman/mason.nvim" }
 end)
 ```
-
 
 - Files
 ```

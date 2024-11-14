@@ -1,0 +1,7 @@
+[general]
+live_config_reload = true
+import = ["~/workspace/github/my/configs/alacritty/alacritty.toml"]
+
+[font]
+size = 14
+normal = { family = "Monaco", style = "Regular" }
