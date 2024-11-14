@@ -1,0 +1,25 @@
+[general]
+live_config_reload = true
+
+[terminal.shell]
+program = "/bin/zsh"
+args = ["-l", "-c", "tmux attach || tmux new-session -s today"]
+
+[window]
+startup_mode = "Fullscreen"
+option_as_alt = "OnlyLeft"
+
+[scrolling]
+history = 50000
+
+[colors.primary]
+background = "#000000"
+
+[cursor]
+style = { shape = "Block", blinking = "Off" }
+
+# 'Tab' feature is not for Alacritty. Or I don't know how to use it.
+[[keyboard.bindings]]
+key = "T"
+mods = "Command"
+action = "None"
